@@ -9,12 +9,16 @@ const CustomTable = styled(Box)`
 	display: grid;
 	place-items: center;
 	table {
-		max-width: 80vw;
-		text-align: center;
+		max-width: 90vw;
 	}
 	td,
 	th {
 		border: 1px solid;
+		text-align: center;
+	}
+
+	th {
+		padding: 0.5em 1em;
 	}
 `
 
