@@ -1,4 +1,3 @@
-import React from 'react'
 import Table from './Table'
 import styled from 'styled-components'
 import { Box } from '@chakra-ui/react'
@@ -6,19 +5,19 @@ import { Box } from '@chakra-ui/react'
 const CustomTable = styled(Box)`
 	width: 100vw;
 	height: 100vh;
-	display: grid;
-	place-items: center;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	flex-wrap: wrap;
 	table {
 		max-width: 90vw;
+		margin-bottom: 2rem;
 	}
 	td,
 	th {
 		border: 1px solid;
 		text-align: center;
-	}
-
-	th {
-		padding: 0.5em 1em;
+		width: 200px;
 	}
 `
 

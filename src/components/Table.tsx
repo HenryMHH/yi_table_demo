@@ -1,7 +1,13 @@
-import { Box, Image, Spinner } from '@chakra-ui/react'
+import { Box, Image, Input, Spinner, Text } from '@chakra-ui/react'
 import React from 'react'
 import useCountryData from '../useState/useCountryData'
-import { useTable, usePagination, Column, useSortBy } from 'react-table'
+import {
+	useTable,
+	usePagination,
+	Column,
+	useSortBy,
+	useFilters,
+} from 'react-table'
 import CountryDetailModal from './CountryDetailModal'
 
 interface countryData {
@@ -13,10 +19,31 @@ interface countryData {
 	nativeName: string
 }
 
+function DefaultColumnFilter({ column: { filterValue, setFilter } }: any) {
+	return (
+		<Input
+			value={filterValue || ''}
+			onChange={(e) => {
+				setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+			}}
+			placeholder={`請輸入國家`}
+			borderColor="black"
+		/>
+	)
+}
+
 export default function Table() {
 	const countryData: Array<countryData> = useCountryData()
 
 	const data = React.useMemo(() => countryData, [countryData])
+
+	const defaultColumn = React.useMemo(
+		() => ({
+			// Let's set up our default Filter UI
+			Filter: DefaultColumnFilter,
+		}),
+		[]
+	)
 
 	const columns: Array<Column<countryData>> = React.useMemo(
 		() => [
@@ -26,6 +53,8 @@ export default function Table() {
 				Cell: (row) => {
 					return <Image src={row.value} w="50px" mx="auto" />
 				},
+
+				disableFilters: true,
 			},
 			{
 				Header: 'Name',
@@ -37,18 +66,22 @@ export default function Table() {
 			{
 				Header: 'Alpha2Code',
 				accessor: 'alpha2Code',
+				disableFilters: true,
 			},
 			{
 				Header: 'Alpha3Code',
 				accessor: 'alpha3Code',
+				disableFilters: true,
 			},
 			{
 				Header: 'CallingCodes',
 				accessor: 'callingCodes',
+				disableFilters: true,
 			},
 			{
 				Header: 'NativeName',
 				accessor: 'nativeName',
+				disableFilters: true,
 			},
 		],
 		[]
@@ -71,7 +104,13 @@ export default function Table() {
 		previousPage,
 		state: { pageIndex },
 	} = useTable(
-		{ columns, data, initialState: { pageIndex: 1, pageSize: 25 } },
+		{
+			columns,
+			data,
+			defaultColumn,
+			initialState: { pageIndex: 0, pageSize: 25 },
+		},
+		useFilters,
 		useSortBy,
 		usePagination
 	)
@@ -91,15 +130,40 @@ export default function Table() {
 										// Apply the header cell props
 
 										return (
-											<th
-												{...column.getHeaderProps(
-													column.getSortByToggleProps()
-												)}
-											>
-												{
-													// Render the header
-													column.render('Header')
-												}
+											<th>
+												<Box
+													py=".5em"
+													{...column.getHeaderProps(
+														column.getSortByToggleProps()
+													)}
+												>
+													{
+														// Render the header
+														column.render('Header')
+													}
+													{column.isSorted ? (
+														column.isSortedDesc ? (
+															<Text>&uarr;</Text>
+														) : (
+															<Text>&darr;</Text>
+														)
+													) : (
+														''
+													)}
+												</Box>
+												<Box borderTop="1px solid" py=".5em" px="1em">
+													{column.canFilter ? (
+														// <Input
+														// 	placeholder="請輸入國家"
+														// 	borderColor="black"
+														// 	type="text"
+														// 	onChange={(e) => column.setFilter(e.target.value)}
+														// />
+														column.render('Filter')
+													) : (
+														<Input disabled defaultValue="暫不開放" />
+													)}
+												</Box>
 											</th>
 										)
 									})
