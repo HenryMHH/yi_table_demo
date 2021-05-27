@@ -117,6 +117,26 @@ export default function Table() {
 
 	return countryData.length !== 0 ? (
 		<>
+			<div className="pagination">
+				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+					{'<<'}
+				</button>{' '}
+				<button onClick={() => previousPage()} disabled={!canPreviousPage}>
+					{'<'}
+				</button>{' '}
+				<button onClick={() => nextPage()} disabled={!canNextPage}>
+					{'>'}
+				</button>{' '}
+				<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+					{'>>'}
+				</button>{' '}
+				<Box d="inline" fontSize="1.5em">
+					Page{' '}
+					<strong>
+						{pageIndex + 1} of {pageOptions.length}
+					</strong>{' '}
+				</Box>
+			</div>
 			<table {...getTableProps()}>
 				<thead>
 					{
@@ -207,26 +227,6 @@ export default function Table() {
 					}
 				</tbody>
 			</table>
-			<div className="pagination">
-				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-					{'<<'}
-				</button>{' '}
-				<button onClick={() => previousPage()} disabled={!canPreviousPage}>
-					{'<'}
-				</button>{' '}
-				<button onClick={() => nextPage()} disabled={!canNextPage}>
-					{'>'}
-				</button>{' '}
-				<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-					{'>>'}
-				</button>{' '}
-				<span>
-					Page{' '}
-					<strong>
-						{pageIndex + 1} of {pageOptions.length}
-					</strong>{' '}
-				</span>
-			</div>
 		</>
 	) : (
 		<Box d="flex" alignItems="center" fontSize="3rem">
