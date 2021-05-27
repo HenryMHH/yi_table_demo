@@ -143,12 +143,16 @@ export default function Table() {
 													}
 													{column.isSorted ? (
 														column.isSortedDesc ? (
-															<Text>&uarr;</Text>
+															<Text d="inline" ml="1em">
+																&uarr;
+															</Text>
 														) : (
-															<Text>&darr;</Text>
+															<Text d="inline" ml="1em">
+																&darr;
+															</Text>
 														)
 													) : (
-														''
+														' '
 													)}
 												</Box>
 												<Box borderTop="1px solid" py=".5em" px="1em">
